@@ -3131,7 +3131,11 @@ pub fn handle_build(options: BuildOptions) -> Result<()> {
             "{} {}{} Build ({})",
             zip_prefix, build_variant_suffix, feature_suffix, date_str
         );
-
+        let release_repo = env::var("GITHUB_REPOSITORY")
+            .ok()
+            .filter(|repo| !repo.trim().is_empty())
+            .unwrap_or_else(|| proj.repo.clone()
+        );
         if Path::new(&final_zip_name).exists() {
             run_cmd(
                 &[
@@ -3141,7 +3145,7 @@ pub fn handle_build(options: BuildOptions) -> Result<()> {
                     &release_tag,
                     &final_zip_name,
                     "--repo",
-                    &proj.repo,
+                    &release_repo,
                     "--title",
                     &release_title,
                     "--notes",
