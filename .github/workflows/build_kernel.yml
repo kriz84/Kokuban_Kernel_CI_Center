@@ -217,12 +217,14 @@ jobs:
           cargo build --release --locked --manifest-path ci_core_rs/Cargo.toml
           cp ci_core_rs/target/release/kokuban_ci_core ./kokuban_ci_core
 
-      - name: Download CI Core
-        if: github.ref == 'refs/heads/main'
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+       - name: Bypass and Build CI Core locally
         run: |
-          ./scripts/fetch-ci-core.sh
+          echo "Baue Steuerungs-Core lokal aus den frischen Quellen..."
+          sudo apt-get update && sudo apt-get install -y build-essential curl
+          cargo build --manifest-path ci_core_rs/Cargo.toml --release
+          mkdir -p bin
+          cp ci_core_rs/target/release/kokuban_ci_core bin/
+          chmod +x bin/kokuban_ci_core
 
       - name: Parse Configuration
         run: ./kokuban_ci_core parse --project "$PROJECT"
