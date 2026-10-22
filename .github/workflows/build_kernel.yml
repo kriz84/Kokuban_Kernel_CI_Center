@@ -235,7 +235,7 @@ jobs:
           ref: ${{ env.BRANCH_TARGET }}
           path: kernel_source
           submodules: recursive
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup sccache
         uses: hendrikmuhs/ccache-action@v1.2.24
