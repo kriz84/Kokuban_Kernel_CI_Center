@@ -269,8 +269,9 @@ jobs:
 
       - name: Build and Release
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           ARGS=(--project "$PROJECT" --branch "$VARIANT" --do-release "$DO_RELEASE")
           if [ -n "$CUSTOM_LOCALVERSION" ]; then
