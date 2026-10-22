@@ -217,7 +217,7 @@ jobs:
           cargo build --release --locked --manifest-path ci_core_rs/Cargo.toml
           cp ci_core_rs/target/release/kokuban_ci_core ./kokuban_ci_core
 
-       - name: Bypass and Build CI Core locally
+      - name: Bypass and Build CI Core locally
         run: |
           echo "Baue Steuerungs-Core lokal aus den frischen Quellen..."
           sudo apt-get update && sudo apt-get install -y build-essential curl
