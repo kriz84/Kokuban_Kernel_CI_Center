@@ -318,7 +318,10 @@ pub fn handle_notify(tag_name: String) -> Result<()> {
 
         if tag_name.starts_with(prefix) {
             target_project = Some(p.clone());
-            repo_url = p.repo;
+            repo_url = env::var("GITHUB_REPOSITORY")
+                .ok()
+                .filter(|repo| !repo.trim().is_empty())
+                .unwrap_or(p.repo);
             break;
         }
     }
@@ -328,14 +331,26 @@ pub fn handle_notify(tag_name: String) -> Result<()> {
         return Ok(());
     }
 
-    let mut destinations = Vec::new();
-    if let Some(chan) = globals.broadcast_channel {
-        destinations.push((chan, None));
-    }
-    if tag_name.contains("BakaSU")
-        && let Some(chat) = globals.bakasu_chat_id
-    {
-        destinations.push((chat, globals.bakasu_topic_id));
+    let mut destinations: Vec<(String, Option<i32>)> = Vec::new();
+
+    if let Ok(chat_id) = env::var("TELEGRAM_CHAT_ID") {
+        let chat_id = chat_id.trim();
+
+        if chat_id.is_empty() {
+            return Err(anyhow!("TELEGRAM_CHAT_ID is empty"));
+        }
+
+        destinations.push((chat_id.to_owned(), None));
+    } else {
+        if let Some(chan) = globals.broadcast_channel {
+            destinations.push((chan, None));
+        }
+
+        if tag_name.contains("BakaSU")
+            && let Some(chat) = globals.bakasu_chat_id
+        {
+            destinations.push((chat, globals.bakasu_topic_id));
+        }
     }
 
     if destinations.is_empty() {
