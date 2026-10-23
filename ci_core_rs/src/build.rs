@@ -3134,8 +3134,7 @@ pub fn handle_build(options: BuildOptions) -> Result<()> {
         let release_repo = env::var("GITHUB_REPOSITORY")
             .ok()
             .filter(|repo| !repo.trim().is_empty())
-            .unwrap_or_else(|| proj.repo.clone()
-        );
+            .unwrap_or_else(|| proj.repo.clone());
         if Path::new(&final_zip_name).exists() {
             run_cmd(
                 &[
