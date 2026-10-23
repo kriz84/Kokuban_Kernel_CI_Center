@@ -3157,7 +3157,9 @@ pub fn handle_build(options: BuildOptions) -> Result<()> {
                 false,
             )?;
 
-            handle_notify(release_tag)?;
+            if let Err(err) = handle_notify(release_tag) {
+                eprintln!("::warning::Telegram notification failed: {err}");
+            }
         } else {
             return Err(anyhow!("Final zip not found"));
         }
