@@ -1,4 +1,5 @@
 name: Verify Pixel 4 ROM kernel
+run-name: Verify Pixel 4 ROM kernel (SUSFS 2.4.0)
 on:
   push:
     branches: [main]
@@ -11,7 +12,7 @@ jobs:
     uses: ./.github/workflows/build_kernel.yml
     with:
       project: floral_sm8150
-      branch: bakasu
+      branch: e59111d9296f1717694a6f60aa1821e4ce18a7a5
       ksu_variant: bakasu
       do_release: false
     secrets: inherit
